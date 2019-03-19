@@ -158,6 +158,11 @@ function start(argv) {
     terminal.error(error);
     process.exit(1);
   }).then((version) => {
+    var rcRegex = /rc[\d]{0,}$/;
+    if (rcRegex.test(version)) {
+      terminal.warning("Kong version is a release candidate e.g " + version + ". You may encounter issues");
+      version = version.replace(rcRegex, '');
+    }
     if (semver.lt(version, '0.9.0')) {
       terminal.error("This version of Kong dashboard doesn't support Kong v0.9 and lower.");
       process.exit(1);
